@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công cụ Mã hóa & Giải mã UTF-8 Siêu Cấp</title>
+    <title>Hệ Thống Mã Hóa UTF-8 Chuẩn Tuyệt Đối</title>
     <style>
-        /* GIAO DIỆN TỐI (DARK MODE) */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: sans-serif;
             background-color: #121214;
             color: #e1e1e6;
             display: flex;
@@ -15,124 +14,112 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
         }
-        /* BẢNG LỚN */
-        .bang-lon {
+        .main-container {
             border: 2px solid #29292e;
             background-color: #1a1a1e;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            max-width: 900px;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 850px;
             width: 100%;
+            box-sizing: border-box;
         }
-        .tieu-de-lon {
+        .main-title {
             text-align: center;
-            color: #ffffff;
-            margin-top: 0;
-            margin-bottom: 30px;
-            font-size: 26px;
+            margin: 0 0 20px 0;
+            font-size: 22px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        /* Khu vực chứa 2 bảng nhỏ */
-        .khu-vuc-bang-nho {
+        .flex-box {
             display: flex;
-            gap: 25px;
+            gap: 15px;
         }
-        @media (max-width: 768px) {
-            .khu-vuc-bang-nho { display: flex; flex-direction: column; }
+        @media (max-width: 600px) {
+            .flex-box {
+                flex-direction: column;
+            }
         }
-        /* BẢNG NHỎ */
-        .bang-nho {
+        .card {
             flex: 1;
             background-color: #202024;
-            border-radius: 12px;
-            padding: 20px;
-            transition: border 0.3s ease;
+            border-radius: 8px;
+            padding: 15px;
+            box-sizing: border-box;
+            min-width: 0;
         }
-        .bang-nho-1 { border: 2px solid #00adb5; }
-        .bang-nho-2 { border: 2px solid #4e9f3d; }
+        .box-ma-hoa { border: 2px solid #00adb5; }
+        .box-giai-ma { border: 2px solid #4e9f3d; }
         
-        .tieu-de-nho {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 19px;
+        .sub-title {
+            margin: 0 0 15px 0;
+            font-size: 16px;
             text-align: center;
+            color: #00adb5;
             font-weight: 600;
         }
-        .bang-nho-1 .tieu-de-nho { color: #00adb5; }
-        .bang-nho-2 .tieu-de-nho { color: #4e9f3d; }
+        .box-giai-ma .sub-title { color: #4e9f3d; }
 
-        /* PHẦN 1 & PHẦN 2 bên trong */
-        .phan-o {
-            margin-bottom: 20px;
+        .input-group {
+            margin-bottom: 15px;
             position: relative;
         }
-        .phan-o:last-child {
+        .input-group:last-child {
             margin-bottom: 0;
         }
-        .nhãn-hàng {
+        .row-label {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        label {
+            margin-bottom: 5px;
+            font-size: 12px;
             font-weight: bold;
-            font-size: 13px;
             color: #a8a8b3;
         }
-        /* Thống kê ký tự và byte */
-        .thong-ke {
-            font-size: 12px;
+        .counter {
             color: #00adb5;
             font-weight: normal;
         }
         textarea {
             width: 100%;
-            height: 90px;
+            height: 100px;
             box-sizing: border-box;
-            padding: 12px;
+            padding: 10px 10px 35px 10px;
             background-color: #121214;
             border: 1px solid #29292e;
             color: #e1e1e6;
-            border-radius: 8px;
+            border-radius: 6px;
             resize: none;
             font-size: 14px;
-            font-family: 'Courier New', Courier, monospace;
-            line-height: 1.5;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            overflow-y: auto;
         }
         textarea:focus {
             border-color: #555;
             outline: none;
         }
-        /* NÚT COPY XỊN XÒ */
-        .nut-copy {
+        .copy-btn {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
+            bottom: 8px;
+            right: 8px;
             background-color: #29292e;
             color: #a8a8b3;
             border: none;
-            padding: 5px 10px;
+            padding: 4px 8px;
             font-size: 11px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            z-index: 5;
         }
-        .nut-copy:hover {
-            background-color: #3e3e44;
-            color: #ffffff;
-        }
-        .nut-copy.copied {
+        .copy-btn.copied {
             background-color: #1b4332;
             color: #52b788;
         }
-        .goi-y {
+        .hint {
             font-size: 11px;
             color: #7c7c8a;
             margin-top: 4px;
@@ -141,139 +128,138 @@
 </head>
 <body>
 
-    <!-- BẢNG LỚN -->
-    <div class="bang-lon">
-        <h2 class="tieu-de-lon">Hệ Thống Xử Lý Mã Hóa UTF-8</h2>
+    <div class="main-container">
+        <h2 class="main-title">Hệ Thống Xử Lý UTF-8</h2>
         
-        <div class="khu-vuc-bang-nho">
-            
-            <!-- BẢNG NHỎ 1: MÃ HÓA -->
-            <div class="bang-nho bang-nho-1">
-                <h3 class="tieu-de-nho">Bảng Nhỏ 1: Mã Hóa</h3>
-                
-                <!-- Phần 1: Nhập chữ -->
-                <div class="phan-o">
-                    <div class="nhãn-hàng">
-                        <label for="input-text">Phần 1: Nhập văn bản thường</label>
-                        <span id="dem-text" class="thong-ke">0 ký tự | 0 byte</span>
+        <div class="flex-box">
+            <!-- BẢNG 1: MÃ HÓA -->
+            <div class="card box-ma-hoa">
+                <h3 class="sub-title">Bảng 1: Mã Hóa</h3>
+                <div class="input-group">
+                    <div class="row-label">
+                        <span>Phần 1: Nhập văn bản thường</span>
+                        <span id="bo-dem" class="counter">0 ký tự | 0 byte</span>
                     </div>
-                    <textarea id="input-text" placeholder="Nhập chữ có dấu... Ví dụ: tỉ đô" oninput="maHoaUTF8()"></textarea>
+                    <textarea id="o-nhap-chu" placeholder="Nhập chữ vào đây..." oninput="chuyenChuThanhMa()" onkeyup="chuyenChuThanhMa()"></textarea>
                 </div>
-                
-                <!-- Phần 2: Hiện kết quả mã -->
-                <div class="phan-o">
-                    <div class="nhãn-hàng">
-                        <label for="output-code">Phần 2: Kết quả mã byte UTF-8</label>
-                    </div>
-                    <textarea id="output-code" readonly placeholder="Dãy số UTF-8 sẽ tự hiện..."></textarea>
-                    <button class="nut-copy" onclick="copyText('output-code', this)">COPY</button>
+                <div class="input-group">
+                    <div class="row-label"><span>Phần 2: Kết quả mã byte UTF-8</span></div>
+                    <textarea id="o-xuat-ma" readonly placeholder="Dãy số UTF-8 sẽ tự hiện..."></textarea>
+                    <button class="copy-btn" onclick="saoChepVanBan('o-xuat-ma', this)">COPY</button>
                 </div>
             </div>
 
-            <!-- BẢNG NHỎ 2: GIẢI MÃ -->
-            <div class="bang-nho bang-nho-2">
-                <h3 class="tieu-de-nho">Bảng Nhỏ 2: Giải Mã</h3>
-                
-                <!-- Phần 1: Nhập mã số -->
-                <div class="phan-o">
-                    <div class="nhãn-hàng">
-                        <label for="input-code">Phần 1: Nhập dãy số UTF-8</label>
-                    </div>
-                    <textarea id="input-code" placeholder="Ví dụ dán vào: 116 225 187 137" oninput="giaiMaUTF8()"></textarea>
-                    <div class="goi-y">Các số từ 0 - 255 cách nhau bằng dấu cách.</div>
+            <!-- BẢNG 2: GIẢI MÃ -->
+            <div class="card box-giai-ma">
+                <h3 class="sub-title">Bảng 2: Giải Mã</h3>
+                <div class="input-group">
+                    <div class="row-label"><span>Phần 1: Nhập dãy số UTF-8</span></div>
+                    <textarea id="o-nhap-ma" placeholder="Ví dụ dán vào: 116 225 187 137" oninput="chuyenMaThanhChu()" onkeyup="chuyenMaThanhChu()"></textarea>
+                    <div class="hint">Các số cách nhau bằng dấu cách.</div>
                 </div>
-                
-                <!-- Phần 2: Hiện chữ ban đầu -->
-                <div class="phan-o">
-                    <div class="nhãn-hàng">
-                        <label for="output-text">Phần 2: Kết quả chữ gốc ban đầu</label>
-                    </div>
-                    <textarea id="output-text" readonly placeholder="Chữ dịch ngược sẽ tự hiện..."></textarea>
-                    <button class="nut-copy" onclick="copyText('output-text', this)">COPY</button>
+                <div class="input-group">
+                    <div class="row-label"><span>Phần 2: Kết quả chữ gốc ban đầu</span></div>
+                    <textarea id="o-xuat-chu" readonly placeholder="Chữ dịch ngược sẽ tự hiện..."></textarea>
+                    <button class="copy-btn" onclick="saoChepVanBan('o-xuat-chu', this)">COPY</button>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- XỬ LÝ LOGIC JAVASCRIPT -->
     <script>
-        // Khởi tạo bộ mã hóa và giải mã toàn cục
-        const encoder = new TextEncoder();
-        const decoder = new TextDecoder("utf-8");
+        // Khởi tạo các bộ mã hóa tiêu chuẩn toàn cục bên ngoài
+        var boMaHoa = new TextEncoder();
+        var boGiaiMa = new TextDecoder("utf-8");
 
-        // Hàm xử lý Bảng 1: Chuyển chữ -> Dãy số UTF-8
-        function maHoaUTF8() {
-            const text = document.getElementById("input-text").value;
-            const outputField = document.getElementById("output-code");
-            const counterField = document.getElementById("dem-text");
-            
-            if (!text) {
-                outputField.value = "";
-                counterField.innerText = "0 ký tự | 0 byte";
+        // Hàm dịch chữ thành dãy số UTF-8
+        function chuyenChuThanhMa() {
+            var vanBanNhap = document.getElementById("o-nhap-chu").value;
+            var oKetQuaMa = document.getElementById("o-xuat-ma");
+            var oHienThiDem = document.getElementById("bo-dem");
+
+            if (vanBanNhap === "") {
+                oKetQuaMa.value = "";
+                oHienThiDem.innerText = "0 ký tự | 0 byte";
                 return;
             }
-            
-            // Mã hóa chuỗi sang byte UTF-8
-            const utf8Bytes = encoder.encode(text);
-            
-            // Tính số lượng ký tự thường và số byte tiêu tốn
-            const charCount = text.length;
-            const byteCount = utf8Bytes.length;
-            counterField.innerText = `${charCount} ký tự | ${byteCount} byte`;
-            
-            // Hiện dãy số thập phân cách nhau bởi khoảng trắng
-            outputField.value = Array.from(utf8Bytes).join(" ");
+
+            // Tiến hành chuyển đổi và đếm ký tự thực tế
+            var mangBytes = boMaHoa.encode(vanBanNhap);
+            oHienThiDem.innerText = vanBanNhap.length + " ký tự | " + mangBytes.length + " byte";
+
+            // Biến mảng byte thành chuỗi số cách nhau bởi khoảng trắng
+            var chuoiSoFormat = Array.from(mangBytes).join(" ");
+            oKetQuaMa.value = chuoiSoFormat;
         }
 
-        // Hàm xử lý Bảng 2: Chuyển dãy số -> Chữ gốc
-        function giaiMaUTF8() {
-            const codeInput = document.getElementById("input-code").value.trim();
-            const outputField = document.getElementById("output-text");
-            
-            if (!codeInput) {
-                outputField.value = "";
+        // Hàm dịch ngược dãy số UTF-8 thành chữ gốc
+        function chuyenMaThanhChu() {
+            var maSoNhap = document.getElementById("o-nhap-ma").value.trim();
+            var oKetQuaChu = document.getElementById("o-xuat-chu");
+
+            if (maSoNhap === "") {
+                oKetQuaChu.value = "";
                 return;
             }
 
             try {
-                // Tách chuỗi bằng khoảng trắng (xử lý cả trường hợp nhiều khoảng trắng)
-                const stringNumbers = codeInput.split(/\s+/);
-                const byteNumbers = stringNumbers.map(num => {
-                    const parsed = parseInt(num, 10);
-                    if (isNaN(parsed) || parsed < 0 || parsed > 255) {
+                // Tách chuỗi số bằng khoảng trắng
+                var danhSachSoChuoi = maSoNhap.split(/\s+/);
+                var mangSoNguyen = [];
+
+                for (var i = 0; i < danhSachSoChuoi.length; i++) {
+                    var giaTriSo = parseInt(danhSachSoChuoi[i], 10);
+                    // Kiểm tra giá trị số hợp lệ của byte dữ liệu (0-255)
+                    if (isNaN(giaTriSo) || giaTriSo < 0 || giaTriSo > 255) {
                         throw new Error();
                     }
-                    return parsed;
-                });
+                    mangSoNguyen.push(giaTriSo);
+                }
 
-                // Chuyển mảng số thành Uint8Array và giải mã
-                const byteArray = new Uint8Array(byteNumbers);
-                outputField.value = decoder.decode(byteArray);
+                // Thực hiện giải mã mảng số nguyên thành chữ tiếng Việt
+                var mảngUint8 = new Uint8Array(mangSoNguyen);
+                var chuGocSauDich = boGiaiMa.decode(mảngUint8);
+                oKetQuaChu.value = chuGocSauDich;
             } catch (error) {
-                outputField.value = "[Lỗi: Dãy số nhập vào chưa đúng định dạng byte UTF-8 (0-255)]";
+                oKetQuaChu.value = "[Lỗi: Dãy số nhập vào chưa đúng định dạng byte UTF-8 (0-255)]";
             }
         }
 
-        // Hàm xử lý nút Copy siêu nhanh
-        function copyText(elementId, buttonElement) {
-            const targetTextArea = document.getElementById(elementId);
-            if (!targetTextArea.value || targetTextArea.value.startsWith("[Lỗi")) return;
+        // Hàm xử lý sao chép nhanh (Tự động fallback cho mọi cấu trúc thiết bị)
+        function saoChepVanBan(idPhanTu, nutBam) {
+            var oCanCopy = document.getElementById(idPhanTu);
+            if (oCanCopy.value === "" || oCanCopy.value.indexOf("[Lỗi") === 0) {
+                return;
+            }
 
-            // Chạy lệnh copy vào Clipboard
-            navigator.clipboard.writeText(targetTextArea.value).then(() => {
-                // Đổi trạng thái nút bấm thành công
-                buttonElement.innerText = "COPIED ✔";
-                buttonElement.classList.add("copied");
+            // Cách 1: Thử dùng API hiện đại
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(oCanCopy.value).then(function() {
+                    doiTrangThaiNut(nutBam);
+                }).catch(function() {
+                    chayCopyDuPhong(oCanCopy, nutBam);
+                });
+            } else {
+                // Cách 2: Chạy dự phòng cho môi trường không có HTTPS hoặc thiết bị cũ
+                chayCopyDuPhong(oCanCopy, nutBam);
+            }
+        }
 
-                // Trả nút về trạng thái cũ sau 1.5 giây
-                setTimeout(() => {
-                    buttonElement.innerText = "COPY";
-                    buttonElement.classList.remove("copied");
-                }, 1500);
-            }).catch(err => {
-                console.error("Không thể copy: ", err);
-            });
+        // Hàm chạy lệnh copy cổ điển phòng hờ lỗi bảo mật hệ thống
+        function chayCopyDuPhong(element, nutBam) {
+            element.select();
+            document.execCommand("copy");
+            doiTrangThaiNut(nutBam);
+        }
+
+        // Hiệu ứng đổi chữ trên nút bấm khi copy thành công
+        function doiTrangThaiNut(nutBam) {
+            nutBam.innerText = "COPIED ✔";
+            nutBam.classList.add("copied");
+            setTimeout(function() {
+                nutBam.innerText = "COPY";
+                nutBam.classList.remove("copied");
+            }, 1500);
         }
     </script>
 </body>
